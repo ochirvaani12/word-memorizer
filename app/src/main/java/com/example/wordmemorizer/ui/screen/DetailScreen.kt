@@ -1,11 +1,8 @@
 package com.example.wordmemorizer.ui.screen
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
@@ -15,7 +12,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,55 +23,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.composable
-
-enum class WordScreen(s: String) {
-    Detail("Detail"),
-    Edit("Edit"),
-    Settings("Settings")
-}
 
 @Composable
-fun DetailScreen(
-    navController: NavHostController = rememberNavController(),
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
-) {
-    Scaffold(
-        topBar = {
-            DetailTopBar(
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() },
-                modifier = modifier,
-            )
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = WordScreen.Detail.name,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            composable(route = WordScreen.Detail.name) {
-                DetailComponent()
-            }
-            composable(route = WordScreen.Edit.name) {
-                Text("Edit")
-            }
-            composable(route = WordScreen.Settings.name) {
-                Text("Settings")
-            }
-        }
-    }
-
-
-}
-
-@Composable
-fun DetailComponent() {
+fun DetailScreen() {
     var englishWord by remember { mutableStateOf("three") }
     var mongolianWord by remember { mutableStateOf("гурав") }
 
@@ -148,32 +98,6 @@ fun NavigationButton(text: String, onClick: () -> Unit) {
     ) {
         Text(text, color = Color.White)
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DetailTopBar(
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        title = { Text("Картын апп") },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = "Settings"
-                    )
-                }
-            }
-        }
-    )
 }
 
 @Preview(showBackground = true)
