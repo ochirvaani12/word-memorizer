@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.wordmemorizer.ui.common.ActionButton
 
 @Composable
 fun DetailScreen() {
@@ -32,71 +33,59 @@ fun DetailScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        OutlinedTextField(
-            value = englishWord,
-            onValueChange = { englishWord = it },
-            textStyle = TextStyle(fontSize = 24.sp),
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter English word") }
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = mongolianWord,
-            onValueChange = { mongolianWord = it },
-            textStyle = TextStyle(fontSize = 24.sp),
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter Mongolian word") }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+        Row (
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
-            ActionButton("НЭМЭХ") { /* Add logic */ }
-            ActionButton("ШИНЭЧЛЭХ") { /* Update logic */ }
-            ActionButton("УСТГАХ") { /* Delete logic */ }
+            ActionButton("УСТГАХ" , { /* Delete logic */ }, color = MaterialTheme.colorScheme.error)
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Column {
+            OutlinedTextField(
+                value = englishWord,
+                onValueChange = { englishWord = it },
+                textStyle = TextStyle(fontSize = 24.sp),
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text("Enter English word") }
+            )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            NavigationButton("ДАРАА") { /* Next logic */ }
-            NavigationButton("ӨМНӨХ") { /* Previous logic */ }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = mongolianWord,
+                onValueChange = { mongolianWord = it },
+                textStyle = TextStyle(fontSize = 24.sp),
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text("Enter Mongolian word") }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                ActionButton("НЭМЭХ", { /* Add logic */ })
+                ActionButton("ШИНЭЧЛЭХ", { /* Update logic */ })
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                ActionButton("ДАРАА", { /* Next logic */ })
+                ActionButton("ӨМНӨХ", { /* Previous logic */ })
+            }
         }
-    }
-}
-
-@Composable
-fun ActionButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(Color(0xFF6200EE)),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Text(text, color = Color.White)
-    }
-}
-
-@Composable
-fun NavigationButton(text: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(Color(0xFF6200EE)),
-        modifier = Modifier.width(120.dp)
-    ) {
-        Text(text, color = Color.White)
+        Row {}
     }
 }
 

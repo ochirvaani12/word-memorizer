@@ -23,6 +23,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.wordmemorizer.ui.screen.DetailScreen
+import com.example.wordmemorizer.ui.screen.EditScreen
+import com.example.wordmemorizer.ui.screen.SettingsScreen
 import com.example.wordmemorizer.ui.theme.WordMemorizerTheme
 
 class MainActivity : ComponentActivity() {
@@ -69,13 +72,13 @@ fun MainApp(
                 .padding(innerPadding)
         ) {
             composable(route = WordScreen.Detail.name) {
-                Text("Detail")
+                DetailScreen()
             }
             composable(route = WordScreen.Edit.name) {
-                Text("Edit")
+                EditScreen()
             }
             composable(route = WordScreen.Settings.name) {
-                Text("Settings")
+                SettingsScreen()
             }
         }
     }
