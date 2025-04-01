@@ -23,13 +23,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.wordmemorizer.model.WordState
 import com.example.wordmemorizer.ui.common.ActionButton
 
 @Composable
-fun DetailScreen() {
-    var englishWord by remember { mutableStateOf("three") }
-    var mongolianWord by remember { mutableStateOf("гурав") }
-
+fun DetailScreen(
+    word: WordState? = null,
+    onDelete: () -> Unit,
+    onInsert: () -> Unit,
+    onUpdate: () -> Unit,
+    onPrev: () -> Unit,
+    onNext: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,13 +48,14 @@ fun DetailScreen() {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            ActionButton("УСТГАХ" , { /* Delete logic */ }, color = MaterialTheme.colorScheme.error)
+            ActionButton("УСТГАХ" , onDelete, color = MaterialTheme.colorScheme.error, enabled = word != null)
         }
 
         Column {
             OutlinedTextField(
-                value = englishWord,
-                onValueChange = { englishWord = it },
+                value = word?.engWord ?: "",
+                readOnly = true,
+                onValueChange = { },
                 textStyle = TextStyle(fontSize = 24.sp),
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Enter English word") }
@@ -58,8 +64,9 @@ fun DetailScreen() {
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = mongolianWord,
-                onValueChange = { mongolianWord = it },
+                value = word?.word ?: "",
+                readOnly = true,
+                onValueChange = { },
                 textStyle = TextStyle(fontSize = 24.sp),
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Enter Mongolian word") }
@@ -71,8 +78,8 @@ fun DetailScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                ActionButton("НЭМЭХ", { /* Add logic */ })
-                ActionButton("ШИНЭЧЛЭХ", { /* Update logic */ })
+                ActionButton("НЭМЭХ", onInsert)
+                ActionButton("ШИНЭЧЛЭХ", onUpdate)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -81,16 +88,10 @@ fun DetailScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                ActionButton("ДАРАА", { /* Next logic */ })
-                ActionButton("ӨМНӨХ", { /* Previous logic */ })
+                ActionButton("ӨМНӨХ", onPrev)
+                ActionButton("ДАРАА", onNext)
             }
         }
         Row {}
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewDetailScreen() {
-    DetailScreen()
 }

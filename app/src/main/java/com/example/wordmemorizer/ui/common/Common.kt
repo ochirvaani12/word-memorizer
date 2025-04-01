@@ -15,11 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ActionButton(text: String, onClick: () -> Unit, color: Color = Color(0xFF6200EE)) {
+fun ActionButton(text: String, onClick: () -> Unit, color: Color = Color(0xFF6200EE), enabled: Boolean = true) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(color),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        enabled = enabled
     ) {
         Text(text, color = Color.White)
     }

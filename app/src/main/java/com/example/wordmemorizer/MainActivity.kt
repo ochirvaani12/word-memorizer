@@ -18,7 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -55,6 +58,8 @@ fun MainApp(
     navController: NavHostController = rememberNavController(),
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
+    val viewModel: MainViewModel = viewModel()
+
     Scaffold(
         topBar = {
             MainAppBar(
@@ -64,6 +69,9 @@ fun MainApp(
             )
         }
     ) { innerPadding ->
+        val words by viewModel.words.collectAsState()
+        val currentWord by viewModel.currentWord.collectAsState()
+
         NavHost(
             navController = navController,
             startDestination = WordScreen.Detail.name,
@@ -72,7 +80,24 @@ fun MainApp(
                 .padding(innerPadding)
         ) {
             composable(route = WordScreen.Detail.name) {
-                DetailScreen()
+                DetailScreen(
+                    word = currentWord,
+                    onDelete = {
+                        viewModel.deleteWord(currentWord)
+                    },
+                    onInsert = {
+                        navController.navigate(WordScreen.Edit.name)
+                    },
+                    onUpdate = {
+                        navController.navigate(WordScreen.Edit.name)
+                    },
+                    onPrev = {
+                        viewModel.setCurrentWord(if(words.indexOf(currentWord) != 0) words[words.indexOf(currentWord) - 1] else currentWord)
+                    },
+                    onNext = {
+                        viewModel.setCurrentWord(if(words.indexOf(currentWord) != words.size - 1) words[words.indexOf(currentWord) + 1] else currentWord)
+                    }
+                )
             }
             composable(route = WordScreen.Edit.name) {
                 EditScreen()
