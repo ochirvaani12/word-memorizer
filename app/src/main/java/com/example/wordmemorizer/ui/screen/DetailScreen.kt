@@ -48,38 +48,51 @@ fun DetailScreen(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
-            ActionButton("УСТГАХ" , onDelete, color = MaterialTheme.colorScheme.error, enabled = word != null)
+            if(word != null) {
+                ActionButton(
+                    "УСТГАХ",
+                    onDelete,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
         }
 
         Column {
-            OutlinedTextField(
-                value = word?.engWord ?: "",
-                readOnly = true,
-                onValueChange = { },
-                textStyle = TextStyle(fontSize = 24.sp),
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Enter English word") }
-            )
+            if(word != null) {
+                Column {
+                    OutlinedTextField(
+                        value = word?.engWord ?: "",
+                        readOnly = true,
+                        onValueChange = { },
+                        textStyle = TextStyle(fontSize = 24.sp),
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Enter English word") }
+                    )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = word?.word ?: "",
-                readOnly = true,
-                onValueChange = { },
-                textStyle = TextStyle(fontSize = 24.sp),
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Enter Mongolian word") }
-            )
+                    OutlinedTextField(
+                        value = word?.word ?: "",
+                        readOnly = true,
+                        onValueChange = { },
+                        textStyle = TextStyle(fontSize = 24.sp),
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Enter Mongolian word") }
+                    )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            } else {
+                Text("No word yet")
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ActionButton("НЭМЭХ", onInsert)
-                ActionButton("ШИНЭЧЛЭХ", onUpdate)
+                if(word != null) {
+                    ActionButton("ЗАСАХ", onUpdate)
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))

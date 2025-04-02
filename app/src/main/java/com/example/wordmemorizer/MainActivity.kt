@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.wordmemorizer.model.WordState
 import com.example.wordmemorizer.ui.screen.DetailScreen
 import com.example.wordmemorizer.ui.screen.EditScreen
 import com.example.wordmemorizer.ui.screen.SettingsScreen
@@ -55,22 +56,22 @@ enum class WordScreen(s: String) {
 
 @Composable
 fun MainApp(
-    navController: NavHostController = rememberNavController(),
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+    viewModel: MainViewModel = viewModel(factory = MainViewModel.factory),
 ) {
-    val viewModel: MainViewModel = viewModel()
+    val navController: NavHostController = rememberNavController()
 
     Scaffold(
         topBar = {
             MainAppBar(
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() },
-                modifier = modifier,
+                onSetiings = {
+                    navController.navigate(WordScreen.Settings.name)
+                }
             )
         }
     ) { innerPadding ->
         val words by viewModel.words.collectAsState()
         val currentWord by viewModel.currentWord.collectAsState()
+        val wordPreference by viewModel.wordPreference.collectAsState()
 
         NavHost(
             navController = navController,
@@ -83,7 +84,7 @@ fun MainApp(
                 DetailScreen(
                     word = currentWord,
                     onDelete = {
-                        viewModel.deleteWord(currentWord)
+                        currentWord?.let { it1 -> viewModel.deleteWord(it1) }
                     },
                     onInsert = {
                         navController.navigate(WordScreen.Edit.name)
@@ -92,18 +93,48 @@ fun MainApp(
                         navController.navigate(WordScreen.Edit.name)
                     },
                     onPrev = {
-                        viewModel.setCurrentWord(if(words.indexOf(currentWord) != 0) words[words.indexOf(currentWord) - 1] else currentWord)
+                        (if( currentWord != null && words.indexOf(currentWord) != 0) words[words.indexOf(currentWord) - 1] else currentWord)?.let { it1 ->
+                            viewModel.setCurrentWord(
+                                it1
+                            )
+                        }
                     },
                     onNext = {
-                        viewModel.setCurrentWord(if(words.indexOf(currentWord) != words.size - 1) words[words.indexOf(currentWord) + 1] else currentWord)
+                        (if(currentWord != null && words.indexOf(currentWord) != words.size - 1) words[words.indexOf(currentWord) + 1] else currentWord)?.let { it1 ->
+                            viewModel.setCurrentWord(
+                                it1
+                            )
+                        }
                     }
                 )
             }
             composable(route = WordScreen.Edit.name) {
-                EditScreen()
+                EditScreen(
+                    word = currentWord ?: WordState(),
+                    onBack = {
+                        navController.navigate(WordScreen.Detail.name)
+                    },
+                    onInsert = { word ->
+                        if(word.id != null) {
+                            viewModel.updateWord(word);
+                        } else {
+                            viewModel.insertWord(word);
+                        }
+                        navController.navigate(WordScreen.Detail.name)
+                    }
+                )
             }
             composable(route = WordScreen.Settings.name) {
-                SettingsScreen()
+                SettingsScreen(
+                    wordPreference = wordPreference,
+                    onBack = {
+                        navController.navigate(WordScreen.Detail.name)
+                    },
+                    onSave = {wordPreference ->
+                        viewModel.updateWordSettings(wordPreference)
+                        navController.navigate(WordScreen.Detail.name)
+                    }
+                )
             }
         }
     }
@@ -112,25 +143,22 @@ fun MainApp(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppBar(
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSetiings: () -> Unit
 ) {
     TopAppBar(
         title = { Text("Картын апп") },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = "Settings"
-                    )
-                }
+        actions = {
+            IconButton(onClick = onSetiings) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert, // Use the vertical ellipsis icon
+                    contentDescription = "More options"
+                )
             }
-        }
+        },
+        modifier = modifier,
     )
 }

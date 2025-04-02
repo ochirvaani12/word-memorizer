@@ -23,12 +23,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.wordmemorizer.model.WordState
 import com.example.wordmemorizer.ui.common.ActionButton
 
 @Composable
-fun EditScreen() {
-    var englishWord by remember { mutableStateOf("Гадаад үг") }
-    var mongolianWord by remember { mutableStateOf("Монгол үг") }
+fun EditScreen(
+    word: WordState,
+    onBack: () -> Unit,
+    onInsert: (word: WordState) -> Unit,
+) {
+    var engWord by remember { mutableStateOf(word.engWord ?: "") }
+    var mongolianWord by remember { mutableStateOf(word.word ?: "") }
 
     Column(
         modifier = Modifier
@@ -40,8 +45,8 @@ fun EditScreen() {
     ) {
 
         OutlinedTextField(
-            value = englishWord,
-            onValueChange = { englishWord = it },
+            value = engWord,
+            onValueChange = { engWord = it },
             textStyle = TextStyle(fontSize = 24.sp),
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Enter English word") }
@@ -63,15 +68,12 @@ fun EditScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ActionButton("БОЛИХ", { /* Add logic */ })
-            ActionButton("ОРУУЛАХ", { /* Update logic */ })
+            ActionButton("БОЛИХ", onBack)
+            ActionButton("ОРУУЛАХ",  {
+                    onInsert(word.copy(engWord = engWord, word = mongolianWord))
+                }
+            )
         }
 
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewEditScreen() {
-    EditScreen()
 }

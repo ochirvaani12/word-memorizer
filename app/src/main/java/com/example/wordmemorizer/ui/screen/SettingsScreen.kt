@@ -24,12 +24,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.wordmemorizer.datastore.BOTH_WORD
+import com.example.wordmemorizer.datastore.ENGLISH_WORD
+import com.example.wordmemorizer.datastore.MONGOLIAN_WORD
 import com.example.wordmemorizer.ui.common.ActionButton
 import com.example.wordmemorizer.ui.common.RowCheckBox
 
 @Composable
-fun SettingsScreen() {
-    var checked by remember { mutableStateOf(true) }
+fun SettingsScreen(
+    wordPreference: String,
+    onBack: () -> Unit,
+    onSave: (checked: String) -> Unit
+) {
+    var checked by remember { mutableStateOf(wordPreference) }
 
     Column(
         modifier = Modifier
@@ -40,15 +47,15 @@ fun SettingsScreen() {
         verticalArrangement = Arrangement.Center
     ) {
 
-        RowCheckBox("Гадаад үгийг ил харуулна", checked) { checked = it };
+        RowCheckBox("Гадаад үгийг ил харуулна", checked == ENGLISH_WORD) { checked = ENGLISH_WORD };
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        RowCheckBox("Монгол үгийг ил харуулна", checked) { checked = it };
+        RowCheckBox("Монгол үгийг ил харуулна", checked == MONGOLIAN_WORD) { checked = MONGOLIAN_WORD };
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        RowCheckBox("Хоёуланг нь ил харуулна", checked) { checked = it };
+        RowCheckBox("Хоёуланг нь ил харуулна", checked == BOTH_WORD) { checked = BOTH_WORD };
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -56,15 +63,9 @@ fun SettingsScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ActionButton("БОЛИХ", { /* Add logic */ })
-            ActionButton("ХАДГАЛАХ", { /* Update logic */ })
+            ActionButton("БОЛИХ", onBack)
+            ActionButton("ХАДГАЛАХ", { onSave(checked) })
         }
 
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSettingsScreen() {
-    SettingsScreen()
 }

@@ -11,12 +11,16 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
+val ENGLISH_WORD: String = "ENGLISH_WORD";
+val MONGOLIAN_WORD: String = "MONGOLIAN_WORD";
+val BOTH_WORD: String = "BOTH_WORD";
+
 class WordDatastore(
     private val dataStore: DataStore<Preferences>
 ) {
     private companion object {
-        val WORD_SETTINGS = stringPreferencesKey("word_settings")
-        const val TAG = "UserPreferencesRepo"
+        val WORD_SETTINGS = stringPreferencesKey("word_preference")
+        const val TAG = "WordPreferences"
     }
 
     val getWordSettings: Flow<String> = dataStore.data
