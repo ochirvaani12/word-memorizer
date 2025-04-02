@@ -17,6 +17,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,10 +35,13 @@ import com.example.wordmemorizer.ui.screen.SettingsScreen
 import com.example.wordmemorizer.ui.theme.WordMemorizerTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             WordMemorizerTheme {
+                val windowSize = calculateWindowSizeClass(this)
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -83,6 +88,7 @@ fun MainApp(
             composable(route = WordScreen.Detail.name) {
                 DetailScreen(
                     word = currentWord,
+                    wordPreference = wordPreference,
                     onDelete = {
                         currentWord?.let { it1 -> viewModel.deleteWord(it1) }
                     },
