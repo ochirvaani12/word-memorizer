@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.wordmemorizer.datastore.BOTH_WORD
 import com.example.wordmemorizer.datastore.ENGLISH_WORD
 import com.example.wordmemorizer.datastore.WordDatastore
 import com.example.wordmemorizer.db.Word
@@ -30,50 +32,62 @@ class MainViewModel(
     private val _currentWord = MutableStateFlow<WordState?>(null)
     val currentWord: StateFlow<WordState?> = _currentWord.asStateFlow()
 
-    private val _wordPreference = MutableStateFlow<String>(ENGLISH_WORD)
-    val wordPreference: StateFlow<String> = _wordPreference.asStateFlow()
+    private val _wordPreference = MutableStateFlow<String?>(null)
+    val wordPreference: StateFlow<String?> = _wordPreference.asStateFlow()
 
     init {
+        initDatastore()
         selectWord()
-        updateWordSettings(_wordPreference.value);
     }
 
-    fun setCurrentWord(word: WordState) {
+    private fun initDatastore() {
+        viewModelScope.launch {
+            wordDatastore.getWordSettings.collect { word ->
+                if (word != null) {
+                    _wordPreference.value = word
+                } else {
+                    updateWordSettings(_wordPreference.value ?: BOTH_WORD)
+                }
+            }
+        }
+    }
+
+    fun setCurrentWord(word: WordState?) {
         _currentWord.value = word;
     }
 
     fun insertWord(word: WordState) {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             wordRepository.insertWord(Word(word = word.word ?: "", engWord = word.engWord ?: ""))
             selectWord()
         }
     }
 
     fun updateWord(word: WordState) {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             wordRepository.updateWord(Word(id = word.id ?: 0, word = word.word ?: "", engWord = word.engWord ?: ""))
             selectWord()
         }
     }
 
     fun deleteWord(word: WordState) {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             wordRepository.deleteWord(Word(id = word.id ?: 0, word = word.word ?: "", engWord = word.engWord ?: ""))
             selectWord()
         }
     }
 
     fun selectWord() {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             wordRepository.selectWord().collect { words ->
                 _words.value = words.map { it.toState() }
-                _currentWord.value = if(_words.value.size > 0) _words.value[0] else null
+                _currentWord.value = if (_words.value.isNotEmpty()) _words.value[0] else null
             }
         }
     }
 
     fun updateWordSettings(wordSetting: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             _wordPreference.value = wordSetting
             wordDatastore.saveWordSettings(wordSetting)
         }

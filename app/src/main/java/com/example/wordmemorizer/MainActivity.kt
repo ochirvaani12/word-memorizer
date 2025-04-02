@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,6 +34,7 @@ import com.example.wordmemorizer.ui.screen.DetailScreen
 import com.example.wordmemorizer.ui.screen.EditScreen
 import com.example.wordmemorizer.ui.screen.SettingsScreen
 import com.example.wordmemorizer.ui.theme.WordMemorizerTheme
+import com.example.wordmemorizer.worker.scheduleNotification
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -50,6 +52,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        scheduleNotification(this)
     }
 }
 
@@ -93,6 +97,7 @@ fun MainApp(
                         currentWord?.let { it1 -> viewModel.deleteWord(it1) }
                     },
                     onInsert = {
+                        viewModel.setCurrentWord(null);
                         navController.navigate(WordScreen.Edit.name)
                     },
                     onUpdate = {
@@ -119,6 +124,7 @@ fun MainApp(
                     word = currentWord ?: WordState(),
                     onBack = {
                         navController.navigate(WordScreen.Detail.name)
+                        viewModel.selectWord()
                     },
                     onInsert = { word ->
                         if(word.id != null) {
@@ -126,6 +132,7 @@ fun MainApp(
                         } else {
                             viewModel.insertWord(word);
                         }
+                        viewModel.selectWord()
                         navController.navigate(WordScreen.Detail.name)
                     }
                 )

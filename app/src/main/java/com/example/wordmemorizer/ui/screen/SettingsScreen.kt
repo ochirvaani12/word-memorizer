@@ -32,7 +32,7 @@ import com.example.wordmemorizer.ui.common.RowCheckBox
 
 @Composable
 fun SettingsScreen(
-    wordPreference: String,
+    wordPreference: String?,
     onBack: () -> Unit,
     onSave: (checked: String) -> Unit
 ) {
@@ -64,7 +64,7 @@ fun SettingsScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ActionButton("БОЛИХ", onBack)
-            ActionButton("ХАДГАЛАХ", { onSave(checked) })
+            ActionButton("ХАДГАЛАХ", { onSave(checked ?: BOTH_WORD) })
         }
 
     }

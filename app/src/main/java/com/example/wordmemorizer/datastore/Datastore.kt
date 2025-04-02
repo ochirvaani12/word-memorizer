@@ -23,7 +23,7 @@ class WordDatastore(
         const val TAG = "WordPreferences"
     }
 
-    val getWordSettings: Flow<String> = dataStore.data
+    val getWordSettings: Flow<String?> = dataStore.data
         .catch {
             if (it is IOException) {
                 Log.e(TAG, "Error reading preferences.", it)
@@ -33,7 +33,7 @@ class WordDatastore(
             }
         }
         .map { preferences ->
-            preferences[WORD_SETTINGS].toString()
+            preferences[WORD_SETTINGS]
         }
 
     suspend fun saveWordSettings(wordSettings: String) {

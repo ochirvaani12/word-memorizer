@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // windows size
     implementation("androidx.compose.material3:material3-window-size-class")
 
     // Datastore
@@ -72,6 +73,9 @@ dependencies {
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
+
+    // work manager
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

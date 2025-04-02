@@ -38,7 +38,7 @@ import com.example.wordmemorizer.ui.common.ActionButton
 @Composable
 fun DetailScreen(
     word: WordState? = null,
-    wordPreference: String,
+    wordPreference: String?,
     onDelete: () -> Unit,
     onInsert: () -> Unit,
     onUpdate: () -> Unit,
@@ -46,8 +46,8 @@ fun DetailScreen(
     onNext: () -> Unit
 ) {
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-    var hideEnglishWord by remember { mutableStateOf((ENGLISH_WORD == wordPreference || BOTH_WORD == wordPreference)) }
-    var hideMongolianWord by remember { mutableStateOf((MONGOLIAN_WORD == wordPreference || BOTH_WORD == wordPreference)) }
+    var seeEnglishWord by remember { mutableStateOf((ENGLISH_WORD == wordPreference)) }
+    var seeMongolianWord by remember { mutableStateOf((MONGOLIAN_WORD == wordPreference)) }
 
 
     Column(
@@ -87,12 +87,12 @@ fun DetailScreen(
             if(word != null) {
                 Column {
                     Text(
-                        text = if (hideEnglishWord) "*****" else  word.engWord ?: "",
+                        text = if (seeMongolianWord) "*****" else  word.engWord ?: "",
                         style = TextStyle(fontSize = 24.sp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .combinedClickable(
-                                onClick = {hideEnglishWord = false},
+                                onClick = {seeMongolianWord = false},
                                 onLongClick = onUpdate
                             )
                     )
@@ -100,12 +100,12 @@ fun DetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = if (hideMongolianWord) "*****" else word.word ?: "",
+                        text = if (seeEnglishWord) "*****" else word.word ?: "",
                         style = TextStyle(fontSize = 24.sp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .combinedClickable(
-                                onClick = {hideMongolianWord = false},
+                                onClick = {seeEnglishWord = false},
                                 onLongClick = onUpdate
                             )
                     )
