@@ -57,11 +57,11 @@ fun SettingsScreen(
 
         RowCheckBox("Хоёуланг нь ил харуулна", checked == BOTH_WORD) { checked = BOTH_WORD };
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             ActionButton("БОЛИХ", onBack)
             ActionButton("ХАДГАЛАХ", { onSave(checked ?: BOTH_WORD) })

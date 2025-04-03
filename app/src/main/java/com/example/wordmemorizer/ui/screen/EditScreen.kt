@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,29 +48,41 @@ fun EditScreen(
         OutlinedTextField(
             value = engWord,
             onValueChange = { engWord = it },
-            textStyle = TextStyle(fontSize = 24.sp),
+            textStyle = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center),
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter English word") }
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = mongolianWord,
-            onValueChange = { mongolianWord = it },
-            textStyle = TextStyle(fontSize = 24.sp),
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter Mongolian word") }
+            placeholder = {
+                Text(
+                    "Enter English word",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        OutlinedTextField(
+            value = mongolianWord,
+            onValueChange = { mongolianWord = it },
+            textStyle = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center),
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text(
+                    "Enter Mongolian word",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             ActionButton("БОЛИХ", onBack)
-            ActionButton("ОРУУЛАХ",  {
+            ActionButton("ХАДГАЛАХ",  {
                     onInsert(word.copy(engWord = engWord, word = mongolianWord))
                 }
             )
