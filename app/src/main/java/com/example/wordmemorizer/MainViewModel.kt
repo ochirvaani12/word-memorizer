@@ -32,7 +32,7 @@ class MainViewModel(
     private val _currentWord = MutableStateFlow<WordState?>(null)
     val currentWord: StateFlow<WordState?> = _currentWord.asStateFlow()
 
-    private val _wordPreference = MutableStateFlow<String?>(null)
+    private val _wordPreference = MutableStateFlow<String?>(BOTH_WORD)
     val wordPreference: StateFlow<String?> = _wordPreference.asStateFlow()
 
     init {

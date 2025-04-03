@@ -3,6 +3,8 @@ package com.example.wordmemorizer.worker
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.WorkerParameters
 import androidx.work.CoroutineWorker
@@ -16,6 +18,7 @@ class ScheduleWorker(
     workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         createNotificationChannel()
         sendNotification(
@@ -26,6 +29,7 @@ class ScheduleWorker(
         return Result.success()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         val name = "Word Reminder"
         val descriptionText = "Notifications for word memorization reminders"
