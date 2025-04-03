@@ -1,5 +1,6 @@
 package com.example.wordmemorizer.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -38,17 +39,23 @@ import com.example.wordmemorizer.ui.common.ActionButton
 @Composable
 fun DetailScreen(
     word: WordState? = null,
-    wordPreference: String?,
+    wordPreference: String? = null,
     onDelete: () -> Unit,
     onInsert: () -> Unit,
     onUpdate: () -> Unit,
     onPrev: () -> Unit,
     onNext: () -> Unit
 ) {
-    var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
-    var seeEnglishWord by remember { mutableStateOf((ENGLISH_WORD == wordPreference)) }
-    var seeMongolianWord by remember { mutableStateOf((MONGOLIAN_WORD == wordPreference)) }
 
+    var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+
+    var seeEnglishWord by remember { mutableStateOf(ENGLISH_WORD == wordPreference) }
+    var seeMongolianWord by remember { mutableStateOf(MONGOLIAN_WORD == wordPreference) }
+
+    LaunchedEffect(wordPreference) {
+        seeEnglishWord = (wordPreference == ENGLISH_WORD)
+        seeMongolianWord = (wordPreference == MONGOLIAN_WORD)
+    }
 
     Column(
         modifier = Modifier

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.wordmemorizer.datastore.WordDatastore
 import com.example.wordmemorizer.db.AppContainer
 import com.example.wordmemorizer.db.IAppContainer
+import com.example.wordmemorizer.worker.scheduleNotification
 
 private const val LAYOUT_PREFERENCE_NAME = "word_preference"
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
@@ -23,5 +24,6 @@ class MainApplication : Application() {
         super.onCreate()
         container = AppContainer(this)
         wordDatastore = WordDatastore(dataStore)
+        scheduleNotification(applicationContext)
     }
 }

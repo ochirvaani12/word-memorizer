@@ -52,8 +52,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        scheduleNotification(this)
     }
 }
 
@@ -167,7 +165,7 @@ fun MainAppBar(
         actions = {
             IconButton(onClick = onSetiings) {
                 Icon(
-                    imageVector = Icons.Default.MoreVert, // Use the vertical ellipsis icon
+                    imageVector = Icons.Default.MoreVert,
                     contentDescription = "More options"
                 )
             }
