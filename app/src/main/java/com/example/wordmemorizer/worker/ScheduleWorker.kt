@@ -60,8 +60,8 @@ class ScheduleWorker(
 
 fun scheduleNotification(context: Context) {
     val workRequest = PeriodicWorkRequestBuilder<ScheduleWorker>(
-        15,
-        TimeUnit.MINUTES
+        30,
+        TimeUnit.DAYS
     )
         .addTag("word_reminder")
         .setInitialDelay(1, TimeUnit.MINUTES)
